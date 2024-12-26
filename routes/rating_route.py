@@ -1,20 +1,9 @@
 from flask import Blueprint, request, jsonify
 from pydantic import ValidationError
-from models.schemas import RMBSPayload
-from core.credit_rating import CreditRatingService
-from utils.logger import logger
+from controllers.rating_controller import validate_payload, calculate_credit_rating_service
 
 # Initialize Blueprint
 api = Blueprint("api", __name__, url_prefix="/api")
-
-
-def validate_payload(data):
-    """Validate and parse the incoming payload."""
-    try:
-        return RMBSPayload.parse_obj(data)
-    except ValidationError as e:
-        logger.error(f"Validation Error: {e.json()}")
-        raise
 
 
 @api.route("/calculate_credit_rating", methods=["POST"])
@@ -25,7 +14,7 @@ def calculate_credit_rating():
         payload = validate_payload(request.json)
 
         # Compute credit rating
-        rating = CreditRatingService().calculate_credit_rating(payload.mortgages)
+        rating = calculate_credit_rating_service(payload.mortgages)
         response = {"status": "success", "credit_rating": rating}
 
         return jsonify(response), 200
@@ -36,5 +25,5 @@ def calculate_credit_rating():
 
     except Exception as e:
         # Log unexpected errors and return a generic message
-        logger.error(f"Unexpected Error: {str(e)}", exc_info=True)
+        Logging.error(f"Unexpected Error: {str(e)}", exc_info=True)
         return jsonify({"status": "error", "message": "An unexpected error occurred."}), 500
