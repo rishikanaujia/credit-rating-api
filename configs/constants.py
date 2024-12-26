@@ -100,11 +100,10 @@ CREDIT_RATING_NOT_FOUND_MSG = "Credit rating not found for the given input."
 VALIDATION_ERROR_MSG = "The provided data is invalid."
 INPUT_ERROR_MSG = "There was an error with the input data."
 
-
 # Additional error messages
 MISSING_KEY_IN_PAYLOAD_MSG = "Missing key in payload."
 INCORRECT_TYPE_IN_PAYLOAD_MSG = "Incorrect type in payload."
 
-# New error messages
 INVALID_JSON_FORMAT_MSG = "Invalid JSON format."
 VALIDATION_FAILED_MSG = "Validation failed."
+ERROR_CALCULATING_RATING_MSG = "Error calculating credit rating."
