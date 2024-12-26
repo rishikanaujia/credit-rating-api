@@ -77,5 +77,34 @@ RATING_AAA = "AAA"
 RATING_BBB = "BBB"
 RATING_C = "C"
 
+#  Credit API Blueprint Configuration
+
+CREDIT_RATING = "credit_rating"
+API_BLUEPRINT_NAME = "api"
+API_URL_PREFIX = "/api"
+
+# Endpoint Routes
+CREDIT_RATING_ENDPOINT = "/calculate_credit_rating"
+
+# Response Messages
+SUCCESS_MSG = "Credit rating calculation successful"
+ERROR_MSG = "An unexpected error occurred."
+
+# HTTP Status Codes
+HTTP_STATUS_OK = 200
+HTTP_STATUS_INTERNAL_SERVER_ERROR = 500
+
+# Logger Messages
+UNEXPECTED_ERROR = "An unexpected error occurred while processing the request."
+CREDIT_RATING_NOT_FOUND_MSG = "Credit rating not found for the given input."
+VALIDATION_ERROR_MSG = "The provided data is invalid."
+INPUT_ERROR_MSG = "There was an error with the input data."
 
 
+# Additional error messages
+MISSING_KEY_IN_PAYLOAD_MSG = "Missing key in payload."
+INCORRECT_TYPE_IN_PAYLOAD_MSG = "Incorrect type in payload."
+
+# New error messages
+INVALID_JSON_FORMAT_MSG = "Invalid JSON format."
+VALIDATION_FAILED_MSG = "Validation failed."

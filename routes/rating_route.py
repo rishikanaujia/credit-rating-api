@@ -1,35 +1,31 @@
-from flask import Blueprint, request, jsonify
+from typing import Any
+from flask import Blueprint, request
 from controllers.rating_controller import validate_payload, calculate_credit_rating_service
-from utils.api_response import ApiResponse
+from utils.response import create_api_response, handle_error
 from utils.decorators import log_method
 from utils.logger import project_logger
+from configs.constants import (
+    API_BLUEPRINT_NAME,
+    API_URL_PREFIX,
+    CREDIT_RATING_ENDPOINT,
+    SUCCESS_MSG,
+    ERROR_MSG,
+    CREDIT_RATING_NOT_FOUND_MSG,
+    CREDIT_RATING,
+    UNEXPECTED_ERROR,
+    VALIDATION_ERROR_MSG,
+    INPUT_ERROR_MSG,
+    MISSING_KEY_IN_PAYLOAD_MSG,
+    INCORRECT_TYPE_IN_PAYLOAD_MSG,
+)
 from http import HTTPStatus
-from typing import Any, Dict, Optional
+from json import JSONDecodeError
 
 # Initialize Blueprint
-api = Blueprint("api", __name__, url_prefix="/api")
+api = Blueprint(API_BLUEPRINT_NAME, __name__, url_prefix=API_URL_PREFIX)
 
 
-@log_method
-def create_api_response(msg: str, status_code: int, data: Optional[Dict[str, Any]] = None) -> Any:
-    """
-    Utility function to create a consistent API response.
-
-    Args:
-        msg (str): Response message.
-        status_code (int): HTTP status code.
-        data (Optional[Dict[str, Any]]): Additional response data (default: None).
-
-    Returns:
-        Any: Flask JSON response object.
-    """
-    response = ApiResponse()
-    response.set_response(msg=msg, status_code=status_code, data=data)
-    return jsonify(response.result())
-
-
-
-@api.route("/calculate_credit_rating", methods=["POST"])
+@api.route(CREDIT_RATING_ENDPOINT, methods=["POST"])
 @log_method
 def calculate_credit_rating() -> Any:
     """
@@ -46,34 +42,26 @@ def calculate_credit_rating() -> Any:
         rating = calculate_credit_rating_service(payload.mortgages)
 
         if not rating:
-            # If no valid rating is found, raise a 404 Not Found error
-            project_logger.warning("Credit rating not found for the given input.")
+            project_logger.warning(CREDIT_RATING_NOT_FOUND_MSG)
+            return create_api_response(
+                msg=CREDIT_RATING_NOT_FOUND_MSG,
+                status_code=HTTPStatus.NOT_FOUND,
+                data={},
+            )
 
-        # Return success response with the computed credit rating
         return create_api_response(
-            msg="Credit rating calculation successful",
+            msg=SUCCESS_MSG,
             status_code=HTTPStatus.OK,
-            data={"credit_rating": rating}
+            data={CREDIT_RATING: rating},
         )
 
-    # except ValidationError as e:
-    #     return create_api_response(
-    #         msg="Invalid input",
-    #         status_code=HTTPStatus.BAD_REQUEST,
-    #         data={"errors": e.errors()}
-    #     )
-    #
-    # except NotFound as e:
-    #
-    #     return create_api_response(
-    #         msg="Resource not found",
-    #         status_code=HTTPStatus.NOT_FOUND,
-    #         data={"error": str(e.description)}
-    #     )
-
+    except JSONDecodeError as e:
+        return handle_error(e, INPUT_ERROR_MSG, HTTPStatus.BAD_REQUEST, "Invalid JSON format")
+    except ValueError as e:
+        return handle_error(e, VALIDATION_ERROR_MSG, HTTPStatus.UNPROCESSABLE_ENTITY, "Validation failed")
+    except KeyError as e:
+        return handle_error(e, MISSING_KEY_IN_PAYLOAD_MSG, HTTPStatus.BAD_REQUEST, "Missing key in payload")
+    except TypeError as e:
+        return handle_error(e, INCORRECT_TYPE_IN_PAYLOAD_MSG, HTTPStatus.BAD_REQUEST, "Incorrect type in payload")
     except Exception as e:
-        return create_api_response(
-            msg="An unexpected error occurred.",
-            status_code=HTTPStatus.INTERNAL_SERVER_ERROR,
-            data={}
-        )
+        return handle_error(e, ERROR_MSG, HTTPStatus.INTERNAL_SERVER_ERROR, UNEXPECTED_ERROR)
