@@ -8,8 +8,14 @@ DEFAULT_ENV = "dev"
 # Configuration file name
 CONFIG_FILE_NAME = "config.ini"
 
+# General Configuration for environments
+HOST = "127.0.0.1"  # Host address for the application
+PORT = 5000  # Port for the application to run
+RELOADED = True  # Whether to use Flask's reloader (True for development, False for production)
+
 # Configuration keys
-ENV_KEY = "FLASK_ENV"
+ENV_KEY = "ENV"
+FLASK_ENV = "FLASK_ENV"
 DEBUG_KEY = "DEBUG"
 HOST_KEY = "HOST"
 PORT_KEY = "PORT"
@@ -19,14 +25,14 @@ RELOADED_KEY = "RELOADED"
 
 # Default values for configuration keys
 DEFAULT_CONFIG_VALUES = {
-    ENV_KEY: "dev",
+    FLASK_ENV: "dev",
     DEBUG_KEY: False,
     HOST_KEY: "127.0.0.1",
     PORT_KEY: 5000,
     LOGGING_TYPE_KEY: "ERROR",
     CACHE_TYPE_KEY: "simple",
 }
-
+USE_RELOADER = "use_reloader"
 LOG_TYPE = {
     "DEBUG": logging.DEBUG,
     "INFO": logging.INFO,
@@ -141,12 +147,6 @@ EMPTY_DATA = {}
 STATUS_CODE = "status_code"
 MSG = "msg"
 DATA = ""
-
-# General Configuration for environments
-ENV = "ENV"  # Set the default environment
-HOST = "127.0.0.1"  # Host address for the application
-PORT = 5000  # Port for the application to run
-RELOADED = True  # Whether to use Flask's reloader (True for development, False for production)
 
 # Error Messages
 ERROR_SERVER_START = "Error while starting the server"

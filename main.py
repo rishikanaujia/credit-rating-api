@@ -1,7 +1,7 @@
 import os
 from flask import Flask
 from configs.config import apply_config_to_app
-from configs.constants import ENV, HOST_KEY, PORT_KEY, RELOADED_KEY
+from configs.constants import ENV_KEY, HOST_KEY, PORT_KEY, RELOADED_KEY, PORT, HOST, USE_RELOADER
 from routes.rating_route import api
 from abc import ABCMeta
 from utils.logger import project_logger
@@ -10,11 +10,11 @@ from utils.logger import project_logger
 class HookServer(metaclass=ABCMeta):
     def __call__(self, flask_app, *args, **kwargs):
         # Manipulate app before the server starts
-        if flask_app.config[ENV] == os.getenv(ENV):
+        if flask_app.config[ENV_KEY] == os.getenv(ENV_KEY):
             # Use Flask's built-in server
-            kwargs["host"] = flask_app.config[HOST_KEY]
-            kwargs["port"] = flask_app.config[PORT_KEY]
-            kwargs["use_reloader"] = flask_app.config[RELOADED_KEY]
+            kwargs[HOST] = flask_app.config[HOST_KEY]
+            kwargs[PORT] = flask_app.config[PORT_KEY]
+            kwargs[USE_RELOADER] = flask_app.config[RELOADED_KEY]
             flask_app.run(*args, **kwargs)
         else:
             # Use WSGI server

@@ -5,7 +5,7 @@ from flask import Flask
 from configs.constants import (
     DEFAULT_ENV,
     CONFIG_FILE_NAME,
-    ENV_KEY,
+    FLASK_ENV,
     DEBUG_KEY,
     HOST_KEY,
     PORT_KEY,
@@ -20,7 +20,7 @@ config = configparser.ConfigParser()
 config.read(CONFIG_PATH)
 
 # Determine the current environment
-ENV = os.environ.get(ENV_KEY, DEFAULT_ENV)
+ENV = os.environ.get(FLASK_ENV, DEFAULT_ENV)
 
 
 class Config:
@@ -28,7 +28,7 @@ class Config:
 
     def __init__(self):
         # General Flask Configurations
-        self.ENV = os.getenv(ENV_KEY, config.get(ENV, ENV_KEY.lower(), fallback=DEFAULT_CONFIG_VALUES[ENV_KEY]))
+        self.ENV = os.getenv(FLASK_ENV, config.get(ENV, FLASK_ENV.lower(), fallback=DEFAULT_CONFIG_VALUES[FLASK_ENV]))
         self.DEBUG = os.getenv(DEBUG_KEY, config.getboolean(ENV, DEBUG_KEY.lower(), fallback=DEFAULT_CONFIG_VALUES[DEBUG_KEY]))
         self.HOST = os.getenv(HOST_KEY, config.get(ENV, HOST_KEY.lower(), fallback=DEFAULT_CONFIG_VALUES[HOST_KEY]))
         self.PORT = os.getenv(PORT_KEY, config.getint(ENV, PORT_KEY.lower(), fallback=DEFAULT_CONFIG_VALUES[PORT_KEY]))
