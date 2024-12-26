@@ -15,6 +15,7 @@ HOST_KEY = "HOST"
 PORT_KEY = "PORT"
 LOGGING_TYPE_KEY = "LOGGING_TYPE"
 CACHE_TYPE_KEY = "CACHE_TYPE"
+RELOADED_KEY = "RELOADED"
 
 # Default values for configuration keys
 DEFAULT_CONFIG_VALUES = {
@@ -36,7 +37,8 @@ LOG_TYPE = {
 # log_configs
 MAX_LOG_SIZE = 25 * 1024 * 1024
 BACKUP_COUNT = 5
-# configs/constants.py
+ERROR_MSG_LOGGER_SETUP = "Error setting up logger"
+ERROR_MSG_LOG_DIR_CREATION = "Error creating log directory"
 
 # Valid Ranges for Credit Score
 CREDIT_SCORE_MIN = 300
@@ -129,3 +131,26 @@ INCORRECT_TYPE_ERROR_MSG = "Incorrect type in payload"
 VALIDATION_ERROR_MSG = "The provided data is invalid."
 VALIDATION_FAILED_MSG = "Validation failed."
 INVALID_JSON_FORMAT_MSG = "Invalid JSON format."
+
+# Constants related to API response messages
+DEFAULT_SUCCESS_MESSAGE = "Request processed successfully."
+DEFAULT_ERROR_MESSAGE = "An error occurred while processing the request."
+ERROR_MSG_LOGGING_EXCEPTION = "Error occurred while logging exception"
+DEFAULT_MSG = 'No message provided'
+EMPTY_DATA = {}
+STATUS_CODE = "status_code"
+MSG = "msg"
+DATA = ""
+
+# General Configuration for environments
+ENV = "ENV"  # Set the default environment
+HOST = "127.0.0.1"  # Host address for the application
+PORT = 5000  # Port for the application to run
+RELOADED = True  # Whether to use Flask's reloader (True for development, False for production)
+
+# Error Messages
+ERROR_SERVER_START = "Error while starting the server"
+ERROR_APP_CREATION = "Error during app creation"
+
+# Log Messages
+LOG_LISTENING_AT = "Listening at: {}:{}"
