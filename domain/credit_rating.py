@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from utils.decorators import log_method
 
 
 class RiskScoreCalculator(ABC):
@@ -8,6 +9,7 @@ class RiskScoreCalculator(ABC):
 
 
 class LoanToValueRisk(RiskScoreCalculator):
+    @log_method
     def calculate(self, mortgage):
         ltv = mortgage.loan_amount / mortgage.property_value
         if ltv > 0.9:
@@ -18,6 +20,7 @@ class LoanToValueRisk(RiskScoreCalculator):
 
 
 class DebtToIncomeRisk(RiskScoreCalculator):
+    @log_method
     def calculate(self, mortgage):
         dti = (mortgage.debt_amount / mortgage.annual_income) * 100
         if dti > 50:

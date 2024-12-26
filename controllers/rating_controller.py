@@ -1,7 +1,7 @@
 from pydantic import ValidationError
 from domain.credit_rating import CreditRatingService
 from schemas.rmbs import RMBSPayload
-from utils.logger import Logging
+from utils.logger import project_logger
 
 
 def validate_payload(data):
@@ -9,7 +9,7 @@ def validate_payload(data):
     try:
         return RMBSPayload.parse_obj(data)
     except ValidationError as e:
-        Logging.error(f"Validation Error: {e.json()}")
+        project_logger.error(f"Validation Error: {e.json()}")
         raise
 
 
