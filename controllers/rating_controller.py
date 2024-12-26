@@ -29,7 +29,7 @@ def validate_payload(data: Dict[str, Any]) -> RMBSPayload:
         raise ValidationError(f"Validation failed: {e}") from e
 
 
-def calculate_credit_rating_service(mortgages: Dict[str, Any]) -> float:
+def calculate_credit_rating_service(mortgages: Dict[str, Any]) -> str:
     """
     Service to calculate credit rating based on mortgage data.
 

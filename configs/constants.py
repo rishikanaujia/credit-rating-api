@@ -36,6 +36,19 @@ LOG_TYPE = {
 # log_configs
 MAX_LOG_SIZE = 25 * 1024 * 1024
 BACKUP_COUNT = 5
+# configs/constants.py
+
+# Valid Ranges for Credit Score
+CREDIT_SCORE_MIN = 300
+CREDIT_SCORE_MAX = 850
+
+# Loan Type Options
+LOAN_TYPE_FIXED = "fixed"
+LOAN_TYPE_ADJUSTABLE = "adjustable"
+
+# Property Type Options
+PROPERTY_TYPE_SINGLE_FAMILY = "single_family"
+PROPERTY_TYPE_CONDO = "condo"
 
 # Constants for Loan-to-Value Risk
 LTV_HIGH_THRESHOLD = 0.9
@@ -59,14 +72,10 @@ CREDIT_SCORE_POOR_ADDITION = 1
 CREDIT_SCORE_NEUTRAL = 0
 
 # Constants for Loan Type Risk
-LOAN_TYPE_FIXED = "fixed"
-LOAN_TYPE_ADJUSTABLE = "adjustable"
 LOAN_TYPE_FIXED_SCORE = -1
 LOAN_TYPE_ADJUSTABLE_SCORE = 1
 
 # Constants for Property Type Risk
-PROPERTY_TYPE_SINGLE_FAMILY = "single_family"
-PROPERTY_TYPE_CONDO = "condo"
 PROPERTY_TYPE_SINGLE_FAMILY_SCORE = 0
 PROPERTY_TYPE_CONDO_SCORE = 1
 
