@@ -6,7 +6,9 @@ from configs.constants import (
     CREDIT_SCORE_GOOD, CREDIT_SCORE_POOR, CREDIT_SCORE_GOOD_DEDUCTION, CREDIT_SCORE_POOR_ADDITION, CREDIT_SCORE_NEUTRAL,
     LOAN_TYPE_FIXED, LOAN_TYPE_ADJUSTABLE, LOAN_TYPE_FIXED_SCORE, LOAN_TYPE_ADJUSTABLE_SCORE,
     PROPERTY_TYPE_SINGLE_FAMILY, PROPERTY_TYPE_CONDO, PROPERTY_TYPE_SINGLE_FAMILY_SCORE, PROPERTY_TYPE_CONDO_SCORE,
-    RATING_SCORE_AAA, RATING_SCORE_BBB, RATING_AAA, RATING_BBB, RATING_C
+    RATING_SCORE_AAA, RATING_SCORE_BBB, RATING_AAA, RATING_BBB, RATING_C,
+    ERROR_MSG_LTV, ERROR_MSG_DTI, ERROR_MSG_CREDIT_SCORE, ERROR_MSG_LOAN_TYPE, ERROR_MSG_PROPERTY_TYPE,
+    ERROR_MSG_TOTAL_RISK, ERROR_MSG_CREDIT_RATING
 )
 from typing import List
 from utils.logger import project_logger
@@ -47,8 +49,8 @@ class LoanToValueRisk(RiskScoreCalculator):
                 return LTV_MEDIUM_SCORE
             return LTV_LOW_SCORE
         except Exception as e:
-            project_logger.error(f"Error calculating LoanToValueRisk: {e}")
-            raise ValueError("Error calculating LoanToValueRisk") from e
+            project_logger.error(f"{ERROR_MSG_LTV}: {e}")
+            raise ValueError(ERROR_MSG_LTV) from e
 
 
 class DebtToIncomeRisk(RiskScoreCalculator):
@@ -71,12 +73,11 @@ class DebtToIncomeRisk(RiskScoreCalculator):
                 return DTI_MEDIUM_SCORE
             return DTI_LOW_SCORE
         except Exception as e:
-            project_logger.error(f"Error calculating DebtToIncomeRisk: {e}")
-            raise ValueError("Error calculating DebtToIncomeRisk") from e
+            project_logger.error(f"{ERROR_MSG_DTI}: {e}")
+            raise ValueError(ERROR_MSG_DTI) from e
 
 
 class CreditScoreRisk(RiskScoreCalculator):
-    @log_method
     def calculate(self, mortgage) -> int:
         """
         Calculate the Credit Score risk score.
@@ -94,12 +95,11 @@ class CreditScoreRisk(RiskScoreCalculator):
                 return CREDIT_SCORE_POOR_ADDITION
             return CREDIT_SCORE_NEUTRAL
         except Exception as e:
-            project_logger.error(f"Error calculating CreditScoreRisk: {e}")
-            raise ValueError("Error calculating CreditScoreRisk") from e
+            project_logger.error(f"{ERROR_MSG_CREDIT_SCORE}: {e}")
+            raise ValueError(ERROR_MSG_CREDIT_SCORE) from e
 
 
 class LoanTypeRisk(RiskScoreCalculator):
-    @log_method
     def calculate(self, mortgage) -> int:
         """
         Calculate the Loan Type risk score.
@@ -117,12 +117,11 @@ class LoanTypeRisk(RiskScoreCalculator):
                 return LOAN_TYPE_ADJUSTABLE_SCORE
             return 0  # Fallback for unexpected loan types
         except Exception as e:
-            project_logger.error(f"Error calculating LoanTypeRisk: {e}")
-            raise ValueError("Error calculating LoanTypeRisk") from e
+            project_logger.error(f"{ERROR_MSG_LOAN_TYPE}: {e}")
+            raise ValueError(ERROR_MSG_LOAN_TYPE) from e
 
 
 class PropertyTypeRisk(RiskScoreCalculator):
-    @log_method
     def calculate(self, mortgage) -> int:
         """
         Calculate the Property Type risk score.
@@ -140,8 +139,8 @@ class PropertyTypeRisk(RiskScoreCalculator):
                 return PROPERTY_TYPE_SINGLE_FAMILY_SCORE
             return 0  # Fallback for unexpected property types
         except Exception as e:
-            project_logger.error(f"Error calculating PropertyTypeRisk: {e}")
-            raise ValueError("Error calculating PropertyTypeRisk") from e
+            project_logger.error(f"{ERROR_MSG_PROPERTY_TYPE}: {e}")
+            raise ValueError(ERROR_MSG_PROPERTY_TYPE) from e
 
 
 class CreditRatingService:
@@ -157,7 +156,6 @@ class CreditRatingService:
             PropertyTypeRisk()
         ]
 
-    @log_method
     def calculate_risk_score(self, mortgage) -> int:
         """
         Calculate the total risk score for a mortgage based on all risk calculators.
@@ -171,10 +169,9 @@ class CreditRatingService:
         try:
             return sum(calculator.calculate(mortgage) for calculator in self.risk_calculators)
         except Exception as e:
-            project_logger.error(f"Error calculating total risk score: {e}")
-            raise ValueError("Error calculating total risk score") from e
+            project_logger.error(f"{ERROR_MSG_TOTAL_RISK}: {e}")
+            raise ValueError(ERROR_MSG_TOTAL_RISK) from e
 
-    @log_method
     def calculate_credit_rating(self, mortgages: List) -> str:
         """
         Calculate the overall credit rating based on the risk score of multiple mortgages.
@@ -200,5 +197,5 @@ class CreditRatingService:
                 return RATING_BBB
             return RATING_C
         except Exception as e:
-            project_logger.error(f"Error calculating credit rating: {e}")
-            raise ValueError("Error calculating credit rating") from e
+            project_logger.error(f"{ERROR_MSG_CREDIT_RATING}: {e}")
+            raise ValueError(ERROR_MSG_CREDIT_RATING) from e
