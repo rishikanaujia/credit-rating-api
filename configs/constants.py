@@ -97,13 +97,26 @@ HTTP_STATUS_INTERNAL_SERVER_ERROR = 500
 # Logger Messages
 UNEXPECTED_ERROR = "An unexpected error occurred while processing the request."
 CREDIT_RATING_NOT_FOUND_MSG = "Credit rating not found for the given input."
-VALIDATION_ERROR_MSG = "The provided data is invalid."
-INPUT_ERROR_MSG = "There was an error with the input data."
-
-# Additional error messages
 MISSING_KEY_IN_PAYLOAD_MSG = "Missing key in payload."
 INCORRECT_TYPE_IN_PAYLOAD_MSG = "Incorrect type in payload."
 
-INVALID_JSON_FORMAT_MSG = "Invalid JSON format."
-VALIDATION_FAILED_MSG = "Validation failed."
+# Error
 ERROR_CALCULATING_RATING_MSG = "Error calculating credit rating."
+ERROR_MSG_LTV = "Error calculating LoanToValueRisk"
+ERROR_MSG_DTI = "Error calculating DebtToIncomeRisk"
+ERROR_MSG_CREDIT_SCORE = "Error calculating CreditScoreRisk"
+ERROR_MSG_LOAN_TYPE = "Error calculating LoanTypeRisk"
+ERROR_MSG_PROPERTY_TYPE = "Error calculating PropertyTypeRisk"
+ERROR_MSG_TOTAL_RISK = "Error calculating total risk score"
+ERROR_MSG_CREDIT_RATING = "Error calculating credit rating"
+INPUT_ERROR_MSG = "There was an error with the input data."
+
+# Success Messages
+SUCCESS_MSG_CREDIT_RATING = "Credit rating calculated successfully"
+
+# Validation and Input Error Messages
+MISSING_KEY_ERROR_MSG = "Missing key in payload"
+INCORRECT_TYPE_ERROR_MSG = "Incorrect type in payload"
+VALIDATION_ERROR_MSG = "The provided data is invalid."
+VALIDATION_FAILED_MSG = "Validation failed."
+INVALID_JSON_FORMAT_MSG = "Invalid JSON format."
