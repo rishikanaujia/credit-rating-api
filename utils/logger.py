@@ -1,87 +1,43 @@
 import logging
-import inspect
-from typing import Any, Dict
-from flask import request
+import os
+from logging.handlers import RotatingFileHandler
 
-from configs import SERVICE_NAME
-from configs.config import Config
-from configs.constants import LOG_TYPE
-
-cfg = Config()
-cfg.as_dict()
-logging.basicConfig(
-    format='{"datetime": "%(asctime)s", "level_name": "%(levelname)s", "message": "%(message)s" }',
-    level=LOG_TYPE.get(cfg.LOGGING_TYPE, "INFO"),
-)
+from configs.constants import MAX_LOG_SIZE, BACKUP_COUNT, SERVICE_NAME
 
 
-class Logging:
+def setup_logger(name, log_file=None, level=logging.INFO, max_log_size=MAX_LOG_SIZE, backup_count=BACKUP_COUNT):
+    """Function to configure and return a logger with rotating file handler and stream handler."""
 
-    @staticmethod
-    def get_logger():
-        return logging
+    # Create log directory in the root of the project
+    log_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'log')
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir)
 
-    @staticmethod
-    def formatting_message(
-            msg: Any
-    ) -> Dict[str, Any]:
-        """formatting message to get better logs
-        :param msg: message that want to print
-        :return: dictionary message
-        """
-        func_inspection = inspect.stack()
-        default_msg = {
-            "service_name": SERVICE_NAME,
-            "text": msg,
-            "func_name": "{}:{}".format(func_inspection[2].function, func_inspection[2].lineno),
-            "func_file_path": func_inspection[2].filename,
-        }
-        try:
-            default_msg["url"] = request.url
-            default_msg["payload"] = request.get_json()
-            default_msg["query_string"] = dict(request.args)
-            return default_msg
-        except RuntimeError:
-            # when entering this exception means
-            # logging come from scheduler and not from flask server
-            return default_msg
+    # If log_file is provided, ensure it is within the log directory
+    if log_file:
+        log_file_path = os.path.join(log_dir, log_file)
+    else:
+        log_file_path = os.path.join(log_dir, f'{SERVICE_NAME}.log')
 
-    @staticmethod
-    def info(message: Any):
-        """Print logging info message
-        :param message: any message
-        :return: None
-        """
-        logging.info(Logging.formatting_message(message))
+    # Create logger
+    logger = logging.getLogger(name)
+    logger.setLevel(level)
 
-    @staticmethod
-    def debug(message: Any):
-        """Print logging debug message
-        :param message: any message
-        :return: None
-        """
-        logging.debug(Logging.formatting_message(message))
+    # Create formatter
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
-    @staticmethod
-    def error(message: Any):
-        """Print logging error message
-        :param message: any message
-        :return: None
-        """
-        logging.error(Logging.formatting_message(message))
+    # File handler with rotating log file (max size 25 MB and keep 5 backup files)
+    rotating_handler = RotatingFileHandler(log_file_path, maxBytes=max_log_size, backupCount=backup_count)
+    rotating_handler.setFormatter(formatter)
+    logger.addHandler(rotating_handler)
 
-    @staticmethod
-    def warning(message: Any):
-        """Print logging warning message
-        :param message: any message
-        :return: None
-        """
-        logging.warning(Logging.formatting_message(message))
+    # Stream handler (for console output)
+    stream_handler = logging.StreamHandler()
+    stream_handler.setFormatter(formatter)
+    logger.addHandler(stream_handler)
 
-    @staticmethod
-    def exception(message: Any):
-        """Print logging exception() message
-        :param message: any message
-        :return: None
-        """
-        logging.exception(Logging.formatting_message(message))
+    return logger
+
+
+# Initialize the logger for the project with log rotation
+project_logger = setup_logger(name=SERVICE_NAME, log_file=f'{SERVICE_NAME}.log')
