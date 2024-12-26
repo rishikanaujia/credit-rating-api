@@ -1,7 +1,31 @@
 import logging
 
 SERVICE_NAME = "credit_rating_api"
+
+# Default environment settings
 DEFAULT_ENV = "dev"
+
+# Configuration file name
+CONFIG_FILE_NAME = "config.ini"
+
+# Configuration keys
+ENV_KEY = "FLASK_ENV"
+DEBUG_KEY = "DEBUG"
+HOST_KEY = "HOST"
+PORT_KEY = "PORT"
+LOGGING_TYPE_KEY = "LOGGING_TYPE"
+CACHE_TYPE_KEY = "CACHE_TYPE"
+
+# Default values for configuration keys
+DEFAULT_CONFIG_VALUES = {
+    ENV_KEY: "dev",
+    DEBUG_KEY: False,
+    HOST_KEY: "127.0.0.1",
+    PORT_KEY: 5000,
+    LOGGING_TYPE_KEY: "ERROR",
+    CACHE_TYPE_KEY: "simple",
+}
+
 LOG_TYPE = {
     "DEBUG": logging.DEBUG,
     "INFO": logging.INFO,
@@ -52,3 +76,6 @@ RATING_SCORE_BBB = 5
 RATING_AAA = "AAA"
 RATING_BBB = "BBB"
 RATING_C = "C"
+
+
+
