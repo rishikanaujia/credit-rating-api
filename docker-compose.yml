@@ -1,0 +1,13 @@
+version: "3.9"
+
+services:
+  credit-rating-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"  # Map container port 5000 to host port 5000
+    environment:
+      - FLASK_ENV=prod
+    volumes:
+      - .:/app  # Mount the local directory to the container (optional)

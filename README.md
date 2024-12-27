@@ -1,130 +1,205 @@
-# Credit Rating Service API
+# Credit Rating API
 
-## Overview
-The Credit Rating Service API provides a RESTful endpoint for calculating credit ratings based on mortgage data. It is designed to validate input data and process risk factors using a modular design pattern for extensibility and maintainability.
+## Project Overview
 
-## Features
-- Modular risk score calculation using the Strategy design pattern.
-- Input validation using Pydantic schemas.
-- Error handling for validation and unexpected issues.
-- Standardized API responses.
+This project is designed to compute the credit rating for Residential Mortgage-Backed Securities (RMBS). It evaluates the creditworthiness of a collection of mortgages based on several factors, including credit scores, loan-to-value (LTV) ratios, debt-to-income (DTI) ratios, loan types, and property types.
 
-## Endpoints
+### Key Features:
 
-### POST `/calculate_credit_rating`
-Calculates the credit rating based on the provided mortgage data.
+- **Input**: Accepts a JSON payload of mortgage details.
+- **Output**: Returns a credit rating (e.g., "AAA", "BBB", "C").
+- **Extensible**: Modular design allows future enhancements like additional attributes or optimization techniques.
+- **Tested**: Includes unit tests to ensure robustness and accuracy.
 
-#### Request
-- **Content-Type**: `application/json`
+---
 
-##### Example Request Body
-```json
-{
-  "mortgages": [
-    {
-      "loan_amount": 250000,
-      "property_value": 300000,
-      "debt_amount": 50000,
-      "annual_income": 75000,
-      "credit_score": 720,
-      "loan_type": "fixed",
-      "property_type": "house"
-    },
-    {
-      "loan_amount": 400000,
-      "property_value": 500000,
-      "debt_amount": 100000,
-      "annual_income": 120000,
-      "credit_score": 680,
-      "loan_type": "variable",
-      "property_type": "condo"
-    }
-  ]
-}
+## Project Structure
+
+The directory structure is as follows:
+
+```
+credit-rating-api/
+│
+├── configs/
+│   ├── __init__.py          # Initialization module
+│   ├── config.py            # Handles configuration settings
+│   ├── constants.py         # Stores global constants
+│   ├── config.ini           # Configurable settings
+│
+├── controllers/
+│   ├── __init__.py
+│   ├── rating_controller.py # API endpoint controller logic
+│
+├── domain/
+│   ├── __init__.py
+│   ├── credit_rating.py     # Core logic for credit rating calculations
+│
+├── log/
+│   ├── credit_rating_api.log # Log file for tracking application activity
+│
+├── routes/
+│   ├── __init__.py
+│   ├── rating_route.py      # Routing logic for API requests
+│
+├── schemas/
+│   ├── __init__.py
+│   ├── rmbs.py              # Schema definitions for input validation
+│
+├── tests/
+│   ├── test_credit_rating.py # Unit tests for credit rating calculations
+│   ├── test_rating_route.py  # Unit tests for API endpoints
+│
+├── utils/
+│   ├── __init__.py
+│   ├── decorators.py        # Utility decorators for error handling, logging, etc.
+│   ├── error_handlers.py    # Centralized error handling
+│   ├── logger.py            # Logging utility
+│   ├── response.py          # Helper functions for formatting API responses
+│
+├── .env                     # Environment variables
+├── .gitignore               # Git ignore file
+├── Dockerfile               # Docker configuration
+├── main.py                  # Entry point of the application
+├── README.md                # Documentation (this file)
+└── requirements.txt         # Dependencies
 ```
 
-#### Response
-- **Status Code**: `200 OK`
-- **Content-Type**: `application/json`
+---
 
-##### Example Success Response
-```json
-{
-  "status": "success",
-  "credit_rating": "BBB"
-}
-```
+## Installation and Setup
 
-##### Example Error Responses
-- **Validation Error**: `400 Bad Request`
-```json
-{
-  "status": "error",
-  "errors": [
-    {
-      "loc": ["mortgages", 0, "loan_amount"],
-      "msg": "value is not a valid integer",
-      "type": "type_error.integer"
-    }
-  ]
-}
-```
+### Prerequisites:
 
-- **Unexpected Error**: `500 Internal Server Error`
-```json
-{
-    "data": {
-        "credit_rating": "C"
-    },
-    "msg": "Credit rating calculation successful",
-    "status_code": 200
-}
-```
+- Python 3.8+
+- Virtual environment (optional, but recommended)
 
-## Installation
+### Steps:
 
-### Prerequisites
-- Python 3.12+
-- pip (Python package manager)
-
-### Steps
 1. Clone the repository:
+
    ```bash
-   git clone https://github.com/your-repo/credit-rating-service.git
-   cd credit-rating-service
+   git clone <repository_url>
+   cd credit-rating-api
    ```
 
 2. Install dependencies:
+
    ```bash
    pip install -r requirements.txt
    ```
 
-3. Run the Flask application:
+3. Set up the environment:
+
+   - Add required environment variables in the `.env` file.
+
+4. Start the application:
+
    ```bash
    python main.py
    ```
 
+---
+
+## Usage
+
+### API Endpoint
+
+#### Calculate Credit Rating
+
+- **Endpoint**: `/calculate_credit_rating`
+- **Method**: `POST`
+- **Request Body**:
+  ```json
+  {
+    "mortgages": [
+      {
+        "credit_score": 750,
+        "loan_amount": 200000,
+        "property_value": 250000,
+        "annual_income": 60000,
+        "debt_amount": 20000,
+        "loan_type": "fixed",
+        "property_type": "single_family"
+      }
+    ]
+  }
+  ```
+- **Response**:
+  ```json
+  {
+      "data": {
+          "credit_rating": "C"
+      },
+      "msg": "Credit rating calculation successful",
+      "status_code": 200
+  }
+  ```
+
+---
+
 ## Testing
-Run the test suite to ensure all components are functioning as expected:
+
+Run the unit tests using `unittest`:
+
 ```bash
-unittest
+
 ```
 
-## Architecture
+Tests include:
 
-### Core Modules
-- **Risk Calculators**: Modular classes for calculating specific risk factors.
-- **CreditRatingService**: Aggregates risk scores and determines credit ratings.
+- Valid mortgage cases
+- Edge cases (e.g., missing attributes, invalid values)
+- End-to-end API functionality
 
-### API Layer
-- Handles incoming requests, validates payloads, and returns appropriate responses.
+---
+## Docker
 
-## License
-This project is licensed under the MIT License. See the LICENSE file for details.
+### Build and Run with Docker
+1. **Build the Image**:
+   ```bash
+   docker build -t credit-rating-api .
+   ```
 
-## Contributing
-Contributions are welcome! Please submit a pull request or open an issue for any improvements or suggestions.
+2. **Run the Container**:
+   ```bash
+   docker run -p 5000:5000 credit-rating-api
+   ```
 
-## Contact
-For questions or support, please contact [your-email@example.com](mailto:your-email@example.com).
+3. **Run with Docker Compose**:
+   ```bash
+   docker-compose up --build
+   ```
 
+---
+## Technical Details
+
+### Rating Calculation Logic
+
+The rating is based on:
+
+1. **Loan-to-Value (LTV) Ratio**
+2. **Debt-to-Income (DTI) Ratio**
+3. **Credit Score**
+4. **Loan Type**
+5. **Property Type**
+6. **Average Credit Score**
+
+The algorithm calculates a risk score for each mortgage and aggregates it to determine the final rating:
+
+- **AAA**: Total Score ≤ 2
+- **BBB**: Total Score 3-5
+- **C**: Total Score > 5
+
+### Error Handling
+
+- **Validation Errors**: Invalid or missing attributes result in a 400 Bad Request.
+- **Server Errors**: Unexpected issues return a 500 Internal Server Error.
+
+---
+
+## Future Enhancements
+
+- Optimize for high volumes of requests.
+- Implement security features (e.g., authentication, data encryption).
+
+---
