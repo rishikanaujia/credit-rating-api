@@ -73,8 +73,11 @@ Calculates the credit rating based on the provided mortgage data.
 - **Unexpected Error**: `500 Internal Server Error`
 ```json
 {
-  "status": "error",
-  "message": "An unexpected error occurred."
+    "data": {
+        "credit_rating": "C"
+    },
+    "msg": "Credit rating calculation successful",
+    "status_code": 200
 }
 ```
 
@@ -104,7 +107,7 @@ Calculates the credit rating based on the provided mortgage data.
 ## Testing
 Run the test suite to ensure all components are functioning as expected:
 ```bash
-pytest
+unittest
 ```
 
 ## Architecture
