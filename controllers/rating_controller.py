@@ -1,15 +1,16 @@
-from typing import Any, Dict
+from typing import Any, Dict, List
 from pydantic import ValidationError
 from configs.constants import (
     VALIDATION_ERROR_MSG,
-    ERROR_CALCULATING_RATING_MSG
+    ERROR_CALCULATING_RATING_MSG,
+    VALIDATION_FAILED_MSG
 )
 from domain.credit_rating import CreditRatingService
 from schemas.rmbs import RMBSPayload
 from utils.logger import project_logger
 
 
-def validate_payload(data: Dict[str, Any]) -> RMBSPayload:
+def validate_payload(data: Dict[List, Any]) -> RMBSPayload:
     """
     Validate and parse the incoming payload.
 
@@ -23,10 +24,10 @@ def validate_payload(data: Dict[str, Any]) -> RMBSPayload:
         ValidationError: If the payload is not valid according to the RMBSPayload schema.
     """
     try:
-        return RMBSPayload.parse_obj(data)
+        return RMBSPayload.model_validate(data)
     except ValidationError as e:
         project_logger.error(f"{VALIDATION_ERROR_MSG}: {e.json()}")
-        raise ValidationError(f"Validation failed: {e}") from e
+        raise ValidationError(f"{VALIDATION_FAILED_MSG}: {e}") from e
 
 
 def calculate_credit_rating_service(mortgages: Dict[str, Any]) -> str:
