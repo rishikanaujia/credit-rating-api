@@ -1,27 +1,41 @@
-# Use a lightweight Python base image for production
-FROM python:3.12-slim as base
+# Stage 1: Build stage
+FROM python:3.12-slim as build
 
-# Create a virtual environment for isolation
+# Set environment variables
 ENV VIRTUAL_ENV=/opt/venv
-RUN python3 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
-# Set the working directory
-WORKDIR /app
-
-# Install system dependencies for Python packages
+# Install system dependencies for building Python packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential libpq-dev gcc \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy the requirements file
+# Set the working directory
+WORKDIR /app
+
+# Copy the requirements file to leverage Docker cache
 COPY requirements.txt .
 
-# Install dependencies with pip in the virtual environment
-RUN pip install --no-cache-dir --upgrade pip && pip install --no-cache-dir -r requirements.txt
+# Create a virtual environment and install dependencies
+RUN python3 -m venv $VIRTUAL_ENV \
+    && pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir -r requirements.txt
 
-# Copy the application code
+# Stage 2: Final stage
+FROM python:3.12-slim as final
+
+# Set the virtual environment path
+ENV VIRTUAL_ENV=/opt/venv
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
+# Set the working directory for the final container
+WORKDIR /app
+
+# Copy the virtual environment from the build stage
+COPY --from=build /opt/venv /opt/venv
+
+# Copy the application code to the container (excluding unnecessary files)
 COPY . .
 
 # Expose the application port

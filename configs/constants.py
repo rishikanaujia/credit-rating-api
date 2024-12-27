@@ -37,6 +37,7 @@ DEFAULT_CONFIG_VALUES = {
     LOGGING_TYPE_KEY: "ERROR",
     CACHE_TYPE_KEY: "simple",
 }
+TRUE_VALUES = {'true', '1', 't', 'y', 'yes'}
 USE_RELOADER = "use_reloader"
 LOG_TYPE = {
     "DEBUG": logging.DEBUG,
