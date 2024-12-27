@@ -4,6 +4,8 @@ from configs.config import apply_config_to_app
 from configs.constants import ENV_KEY, HOST_KEY, PORT_KEY, RELOADED_KEY, PORT, HOST, USE_RELOADER
 from routes.rating_route import api
 from abc import ABCMeta
+
+from utils.decorators import limiter
 from utils.logger import project_logger
 
 
@@ -19,13 +21,17 @@ class HookServer(metaclass=ABCMeta):
         else:
             # Use WSGI server
             from gevent.pywsgi import WSGIServer
-            http_server = WSGIServer((flask_app.config[HOST_KEY], flask_app.config[PORT_KEY]), flask_app, log=project_logger)
+            http_server = WSGIServer((flask_app.config[HOST_KEY], flask_app.config[PORT_KEY]), flask_app,
+                                     log=project_logger)
             project_logger.info(f"Listening at: {flask_app.config[HOST_KEY]}:{flask_app.config[PORT_KEY]}")
             http_server.serve_forever()
 
 
 def create_app():
     flask_app = Flask(__name__)
+
+    # Register Limiter with the Flask app
+    limiter.init_app(flask_app)
 
     # Apply configuration
     apply_config_to_app(flask_app)
