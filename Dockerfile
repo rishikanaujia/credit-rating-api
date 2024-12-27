@@ -28,7 +28,7 @@ COPY . .
 EXPOSE 5000
 
 # Set the environment variables
-ENV PYTHONUNBUFFERED=1 FLASK_ENV=production
+ENV PYTHONUNBUFFERED=1 FLASK_ENV=prod
 
 # Start the application
 CMD ["python", "main.py"]
