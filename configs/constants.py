@@ -164,7 +164,7 @@ ERROR_SERVER_START = "Error while starting the server"
 ERROR_APP_CREATION = "Error during app creation"
 
 # Log Messages
-LOG_LISTENING_AT = "Listening at: {}:{}"
+LOG_LISTENING_AT = "Listening at"
 
 # unittest
 LOW_RISK_PAYLOAD = {

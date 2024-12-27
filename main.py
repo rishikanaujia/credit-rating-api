@@ -1,7 +1,7 @@
 import os
 from flask import Flask
 from configs.config import apply_config_to_app
-from configs.constants import ENV_KEY, HOST_KEY, PORT_KEY, RELOADED_KEY, PORT, HOST, USE_RELOADER
+from configs.constants import ENV_KEY, HOST_KEY, PORT_KEY, RELOADED_KEY, PORT, HOST, USE_RELOADER, LOG_LISTENING_AT
 from routes.rating_route import api
 from abc import ABCMeta
 
@@ -23,7 +23,7 @@ class HookServer(metaclass=ABCMeta):
             from gevent.pywsgi import WSGIServer
             http_server = WSGIServer((flask_app.config[HOST_KEY], flask_app.config[PORT_KEY]), flask_app,
                                      log=project_logger)
-            project_logger.info(f"Listening at: {flask_app.config[HOST_KEY]}:{flask_app.config[PORT_KEY]}")
+            project_logger.info(f"{LOG_LISTENING_AT} : {flask_app.config[HOST_KEY]}:{flask_app.config[PORT_KEY]}")
             http_server.serve_forever()
 
 
