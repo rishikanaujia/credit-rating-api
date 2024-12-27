@@ -23,6 +23,9 @@ LOGGING_TYPE_KEY = "LOGGING_TYPE"
 CACHE_TYPE_KEY = "CACHE_TYPE"
 RELOADED_KEY = "RELOADED"
 
+# request
+POST = "POST"
+
 # Default values for configuration keys
 DEFAULT_CONFIG_VALUES = {
     FLASK_ENV: "dev",
@@ -98,7 +101,6 @@ RATING_C = "C"
 
 CREDIT_RATING = "credit_rating"
 API_BLUEPRINT_NAME = "api"
-API_URL_PREFIX = "/api"
 
 # Endpoint Routes
 CREDIT_RATING_ENDPOINT = "/calculate_credit_rating"
@@ -146,7 +148,7 @@ DEFAULT_MSG = 'No message provided'
 EMPTY_DATA = {}
 STATUS_CODE = "status_code"
 MSG = "msg"
-DATA = ""
+DATA = "data"
 
 # Error Messages
 ERROR_SERVER_START = "Error while starting the server"
@@ -154,3 +156,73 @@ ERROR_APP_CREATION = "Error during app creation"
 
 # Log Messages
 LOG_LISTENING_AT = "Listening at: {}:{}"
+
+# unittest
+LOW_RISK_PAYLOAD = {
+    "mortgages": [
+        {
+            "credit_score": 750,
+            "loan_amount": 200000,
+            "property_value": 250000,
+            "annual_income": 60000,
+            "debt_amount": 20000,
+            "loan_type": "fixed",
+            "property_type": "single_family",
+        }
+    ]
+}
+
+MEDIUM_RISK_PAYLOAD = {
+    "mortgages": [
+        {
+            "credit_score": 700,
+            "loan_amount": 2000.0,
+            "property_value": 250000.0,
+            "annual_income": 6000.0,
+            "debt_amount": 20000.0,
+            "loan_type": "fixed",
+            "property_type": "single_family"
+        },
+        {
+            "credit_score": 680,
+            "loan_amount": 150000.0,
+            "property_value": 175000.0,
+            "annual_income": 45000.0,
+            "debt_amount": 10000.0,
+            "loan_type": "adjustable",
+            "property_type": "condo"
+        }
+    ]
+}
+
+HIGH_RISK_PAYLOAD = {
+    "mortgages": [
+        {
+            "credit_score": 700,
+            "loan_amount": 2000.0,
+            "property_value": 250000.0,
+            "annual_income": 6000.0,
+            "debt_amount": 20000.0,
+            "loan_type": "fixed",
+            "property_type": "single_family"
+        },
+        {
+            "credit_score": 680,
+            "loan_amount": 150000.0,
+            "property_value": 175000.0,
+            "annual_income": 45000.0,
+            "debt_amount": 10000.0,
+            "loan_type": "adjustable",
+            "property_type": "condo"
+        },
+        {
+            "credit_score": 680,
+            "loan_amount": 150000.0,
+            "property_value": 175000.0,
+            "annual_income": 45000.0,
+            "debt_amount": 10000.0,
+            "loan_type": "adjustable",
+            "property_type": "condo"
+        }
+    ]
+}

@@ -6,26 +6,26 @@ from utils.decorators import log_method
 from utils.logger import project_logger
 from configs.constants import (
     API_BLUEPRINT_NAME,
-    API_URL_PREFIX,
     CREDIT_RATING_ENDPOINT,
     SUCCESS_MSG,
     ERROR_MSG,
     CREDIT_RATING_NOT_FOUND_MSG,
     CREDIT_RATING,
-    UNEXPECTED_ERROR,
     VALIDATION_ERROR_MSG,
     INPUT_ERROR_MSG,
     MISSING_KEY_IN_PAYLOAD_MSG,
     INCORRECT_TYPE_IN_PAYLOAD_MSG,
+    INVALID_JSON_FORMAT_MSG,
+    POST,
 )
 from http import HTTPStatus
 from json import JSONDecodeError
 
 # Initialize Blueprint
-api = Blueprint(API_BLUEPRINT_NAME, __name__, url_prefix=API_URL_PREFIX)
+api = Blueprint(API_BLUEPRINT_NAME, __name__)
 
 
-@api.route(CREDIT_RATING_ENDPOINT, methods=["POST"])
+@api.route(CREDIT_RATING_ENDPOINT, methods=[POST])
 @log_method
 def calculate_credit_rating() -> Any:
     """
@@ -56,12 +56,12 @@ def calculate_credit_rating() -> Any:
         )
 
     except JSONDecodeError as e:
-        return handle_error(e, INPUT_ERROR_MSG, HTTPStatus.BAD_REQUEST, "Invalid JSON format")
+        return handle_error(e, INPUT_ERROR_MSG, HTTPStatus.BAD_REQUEST, INVALID_JSON_FORMAT_MSG)
     except ValueError as e:
-        return handle_error(e, VALIDATION_ERROR_MSG, HTTPStatus.UNPROCESSABLE_ENTITY, "Validation failed")
+        return handle_error(e, VALIDATION_ERROR_MSG, HTTPStatus.UNPROCESSABLE_ENTITY)
     except KeyError as e:
-        return handle_error(e, MISSING_KEY_IN_PAYLOAD_MSG, HTTPStatus.BAD_REQUEST, "Missing key in payload")
+        return handle_error(e, MISSING_KEY_IN_PAYLOAD_MSG, HTTPStatus.BAD_REQUEST)
     except TypeError as e:
-        return handle_error(e, INCORRECT_TYPE_IN_PAYLOAD_MSG, HTTPStatus.BAD_REQUEST, "Incorrect type in payload")
+        return handle_error(e, INCORRECT_TYPE_IN_PAYLOAD_MSG, HTTPStatus.BAD_REQUEST)
     except Exception as e:
-        return handle_error(e, ERROR_MSG, HTTPStatus.INTERNAL_SERVER_ERROR, UNEXPECTED_ERROR)
+        return handle_error(e, ERROR_MSG, HTTPStatus.INTERNAL_SERVER_ERROR)
