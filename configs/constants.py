@@ -3,14 +3,16 @@ import logging
 SERVICE_NAME = "credit_rating_api"
 
 # Default environment settings
+LOCAL = "local"
 DEFAULT_ENV = "dev"
 
 # Configuration file name
 CONFIG_FILE_NAME = "config.ini"
 
 # General Configuration for environments
-HOST = "127.0.0.1"  # Host address for the application
-PORT = 5000  # Port for the application to run
+
+HOST = "host"  # Host address for the application
+PORT = "port"  # Port for the application to run
 RELOADED = True  # Whether to use Flask's reloader (True for development, False for production)
 
 # Configuration keys
@@ -36,6 +38,7 @@ DEFAULT_CONFIG_VALUES = {
     PORT_KEY: 5000,
     LOGGING_TYPE_KEY: "ERROR",
     CACHE_TYPE_KEY: "simple",
+    RELOADED_KEY: "false"
 }
 TRUE_VALUES = {'true', '1', 't', 'y', 'yes'}
 USE_RELOADER = "use_reloader"

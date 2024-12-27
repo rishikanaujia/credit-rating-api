@@ -12,12 +12,13 @@ from configs.constants import (
     PORT_KEY,
     LOGGING_TYPE_KEY,
     CACHE_TYPE_KEY,
-    DEFAULT_CONFIG_VALUES, TRUE_VALUES,
+    DEFAULT_CONFIG_VALUES, TRUE_VALUES, RELOADED_KEY,
 )
 from utils.logger import project_logger
 
 # Load environment variables from .env file
 load_dotenv()
+
 
 # Load the configuration from an .ini file
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), CONFIG_FILE_NAME)
@@ -38,6 +39,8 @@ class Config:
         self.HOST = self._get_config_value(HOST_KEY, default=DEFAULT_CONFIG_VALUES[HOST_KEY])
         self.PORT = self._get_config_value(PORT_KEY, default=DEFAULT_CONFIG_VALUES[PORT_KEY], is_integer=True)
         self.LOGGING_TYPE = self._get_config_value(LOGGING_TYPE_KEY, default=DEFAULT_CONFIG_VALUES[LOGGING_TYPE_KEY])
+        self.RELOADED = self._get_config_value(RELOADED_KEY, default=DEFAULT_CONFIG_VALUES[RELOADED_KEY],
+                                               is_boolean=True)
 
         # Application-Specific Configurations
         self.CACHE_TYPE = self._get_config_value(CACHE_TYPE_KEY, default=DEFAULT_CONFIG_VALUES[CACHE_TYPE_KEY])
