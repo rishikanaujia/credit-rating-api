@@ -6,8 +6,8 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"  # Map container port 5000 to host port 5000
-    environment:
-      - FLASK_ENV=prod
+      - "8080:8080"  # Map container port 8080 to host port 8080
+    env_file:
+      - .env  # Load environment variables from the .env file
     volumes:
       - .:/app  # Mount the local directory to the container (optional)
