@@ -1,6 +1,9 @@
 import time
 from functools import wraps
 
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+
 from utils.logger import project_logger
 
 
@@ -44,3 +47,11 @@ def measure_time(func):
         return result
 
     return wrapper
+
+
+# Initialize Limiter
+limiter = Limiter(
+    get_remote_address,  # Use client's IP address for rate limiting
+    default_limits=["200 per day", "50 per hour"],  # Global limits
+    storage_uri="memory://",  # In-memory storage for simplicity
+)

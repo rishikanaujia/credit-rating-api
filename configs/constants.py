@@ -25,9 +25,11 @@ RELOADED_KEY = "RELOADED"
 
 # request
 POST = "POST"
+PER_MINUTE_10 = "10 per minute"  # Allow up to 10 requests per minute per IP
 
 # Default values for configuration keys
 DEFAULT_CONFIG_VALUES = {
+
     FLASK_ENV: "dev",
     DEBUG_KEY: False,
     HOST_KEY: "127.0.0.1",
@@ -129,6 +131,7 @@ ERROR_MSG_PROPERTY_TYPE = "Error calculating PropertyTypeRisk"
 ERROR_MSG_TOTAL_RISK = "Error calculating total risk score"
 ERROR_MSG_CREDIT_RATING = "Error calculating credit rating"
 INPUT_ERROR_MSG = "There was an error with the input data."
+ERROR_LOGGING_EXCEPTION = "Error logging exception"
 
 # Success Messages
 SUCCESS_MSG_CREDIT_RATING = "Credit rating calculated successfully"
@@ -142,13 +145,18 @@ INVALID_JSON_FORMAT_MSG = "Invalid JSON format."
 
 # Constants related to API response messages
 DEFAULT_SUCCESS_MESSAGE = "Request processed successfully."
-DEFAULT_ERROR_MESSAGE = "An error occurred while processing the request."
+DEFAULT_ERROR_REQUEST_MESSAGE = "An error occurred while processing the request."
+DEFAULT_ERROR_RESPONSE_MESSAGE = "Error in creating API response"
 ERROR_MSG_LOGGING_EXCEPTION = "Error occurred while logging exception"
 DEFAULT_MSG = 'No message provided'
+
 EMPTY_DATA = {}
 STATUS_CODE = "status_code"
 MSG = "msg"
 DATA = "data"
+DESCRIPTION = "description"
+TOO_MANY_REQUESTS_MSG = "Too many requests. Please retry after the specified time."
+RETRY_AFTER_HEADER = "Retry-After"
 
 # Error Messages
 ERROR_SERVER_START = "Error while starting the server"
